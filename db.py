@@ -26,7 +26,7 @@ def init_db():
     )
     """)
 
-    subscription_data = [
+    '''subscription_data = [
         (1, "2024-01-01", "2024-06-01", "Copenhagen", 1200.00, 10000, 9000, 1, 500.00),
         (2, "2024-02-15", "2024-08-15", "Aarhus", 1000.00, 8000, 7500, 2, 400.00),
         (3, "2024-03-10", "2024-09-10", "Kolding", 1100.00, 9000, 8500, 3, 450.00)
@@ -38,7 +38,7 @@ def init_db():
             agreed_km, actual_km, vehicle_id, down_payment
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, subscription_data)
+    """, subscription_data)'''
 
     conn.commit()
     conn.close()
