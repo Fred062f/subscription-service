@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from db import init_db
+import inspect
 
 load_dotenv()
 
@@ -311,6 +312,47 @@ def delete_subscription(subscription_id):
         return jsonify({"error": "Subscription not found"}), 404
 
     return jsonify({"message": "Subscription deleted successfully"}), 200
+
+
+@app.route('/endpoints', methods=['GET'])
+def endpoints():
+    """
+    List all available endpoints in the API, including their descriptions, methods, and JWT token requirements.
+    --- 
+    tags:
+      - Utility
+    responses:
+      200:
+        description: A list of all available routes with their descriptions, methods, and JWT token requirements.
+    """
+    excluded_endpoints = {'static', 'flasgger.static', 'flasgger.oauth_redirect', 'flasgger.<lambda>', 'flasgger.apispec'}
+    excluded_methods = {'HEAD', 'OPTIONS'}
+    routes = []
+
+    for rule in app.url_map.iter_rules():
+        if rule.endpoint not in excluded_endpoints:
+            func = app.view_functions.get(rule.endpoint)
+            if not func:
+                continue
+
+            # Get the docstring
+            full_docstring = inspect.getdoc(func)
+            docstring = full_docstring.split('---')[0].replace("\n", " ").strip() if full_docstring else None
+
+            # Check if the @jwt_required() decorator is applied
+            jwt_required = "@jwt_required" in inspect.getsource(func).split('\n')[1]
+
+            # Exclude methods
+            methods = list(rule.methods - excluded_methods)
+
+            routes.append({
+                'endpoint': rule.rule,
+                'methods': methods,
+                'description': docstring,
+                'jwt_required': jwt_required
+            })
+    return jsonify({'endpoints': routes}), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
