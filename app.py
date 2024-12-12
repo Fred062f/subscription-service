@@ -44,7 +44,7 @@ swagger = Swagger(app, config=swagger_config)
 
 init_db()
 
-@app.route('/subscriptions', methods=['POST'])
+@app.route('/add', methods=['POST'])
 @jwt_required()
 def add_subscription():
     """
@@ -116,7 +116,7 @@ def add_subscription():
     conn.close()
     return jsonify({"id": subscription_id, "message": "Subscription added successfully"}), 201
 
-@app.route('/subscriptions', methods=['GET'])
+@app.route('/list', methods=['GET'])
 @jwt_required()
 def get_subscriptions():
     """
@@ -207,7 +207,7 @@ def get_subscriptions():
     return jsonify(subscriptions), 200
 
 
-@app.route('/subscriptions/<int:subscription_id>', methods=['PUT'])
+@app.route('/update/<int:subscription_id>', methods=['PUT'])
 @jwt_required()
 def update_subscription(subscription_id):
     """
@@ -280,7 +280,7 @@ def update_subscription(subscription_id):
 
     return jsonify({"message": "Subscription updated successfully"}), 200
 
-@app.route('/subscriptions/<int:subscription_id>', methods=['DELETE'])
+@app.route('/remove/<int:subscription_id>', methods=['DELETE'])
 @jwt_required()
 def delete_subscription(subscription_id):
     """
@@ -314,7 +314,7 @@ def delete_subscription(subscription_id):
     return jsonify({"message": "Subscription deleted successfully"}), 200
 
 
-@app.route('/endpoints', methods=['GET'])
+@app.route('/', methods=['GET'])
 def endpoints():
     """
     List all available endpoints in the API, including their descriptions, methods, and JWT token requirements.
