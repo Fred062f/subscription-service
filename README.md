@@ -60,7 +60,7 @@ The application will run at `http://127.0.0.1:5000/`.
 ## Endpoints
 
 ### 1. Add a new subscription
-- **URL**: `/subscriptions`
+- **URL**: `/add`
 - **Method**: `POST`
 - **Authentication**: JWT required
 - **Body Parameters**:
@@ -80,7 +80,7 @@ The application will run at `http://127.0.0.1:5000/`.
   - `401`: Unauthorized. Invalid or missing JWT.
 
 ### 2. Get subscriptions
-- **URL**: `/subscriptions`
+- **URL**: `/list`
 - **Method**: `GET`
 - **Authentication**: JWT required
 - **Query Parameters** (optional):
@@ -94,7 +94,7 @@ The application will run at `http://127.0.0.1:5000/`.
   - `200`: List of subscriptions.
 
 ### 3. Update a subscription
-- **URL**: `/subscriptions/<subscription_id>`
+- **URL**: `/update/<subscription_id>`
 - **Method**: `PUT`
 - **Authentication**: JWT required
 - **Body Parameters**:
@@ -112,7 +112,7 @@ The application will run at `http://127.0.0.1:5000/`.
   - `404`: Subscription not found.
 
 ### 4. Delete a subscription
-- **URL**: `/subscriptions/<subscription_id>`
+- **URL**: `/remove/<subscription_id>`
 - **Method**: `DELETE`
 - **Authentication**: JWT required
 
@@ -121,7 +121,7 @@ The application will run at `http://127.0.0.1:5000/`.
   - `404`: Subscription not found.
 
 ### 5. List all API endpoints
-- **URL**: `/endpoints`
+- **URL**: `/`
 - **Method**: `GET`
 - **Response**: List of all available routes with their descriptions, methods, and JWT token requirements.
 
