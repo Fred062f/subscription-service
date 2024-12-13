@@ -163,6 +163,12 @@ def get_subscriptions():
     filters = []
     query = "SELECT * FROM subscriptions WHERE 1=1"
 
+    # Filter by subscription ID
+    subscription_id = request.args.get('subscription_id')
+    if subscription_id:
+        query += " AND subscription_id = ?"
+        filters.append(subscription_id)
+
     # Filter by customer ID
     customer_id = request.args.get('customer_id')
     if customer_id:
@@ -248,6 +254,8 @@ def update_subscription(subscription_id):
               type: integer
             down_payment:
               type: number
+            customer_id:
+              type: integer
     responses:
       200:
         description: Subscription successfully updated.
@@ -258,7 +266,17 @@ def update_subscription(subscription_id):
     updates = []
     params = []
 
-    for key in ["start_date", "end_date", "rental_location", "price_per_month", "agreed_km", "actual_km", "vehicle_id", "down_payment"]:
+    for key in [
+        "start_date",
+        "end_date",
+        "rental_location",
+        "price_per_month",
+        "agreed_km",
+        "actual_km",
+        "vehicle_id",
+        "down_payment",
+        "customer_id",
+    ]:
         if key in data:
             updates.append(f"{key} = ?")
             params.append(data[key])
@@ -279,6 +297,7 @@ def update_subscription(subscription_id):
         return jsonify({"error": "Subscription not found"}), 404
 
     return jsonify({"message": "Subscription updated successfully"}), 200
+
 
 @app.route('/remove/<int:subscription_id>', methods=['DELETE'])
 @jwt_required()
